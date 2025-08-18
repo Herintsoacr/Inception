@@ -1,5 +1,5 @@
 FROM debian:12.0
-WORKDIR /app
+WORKDIR /ngnix
 
 COPY . .
 RUN apt update; \
