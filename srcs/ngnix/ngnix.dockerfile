@@ -14,4 +14,4 @@ RUN apt update; \
 		| sudo tee /etc/apt/preferences.d/99nginx; \
 	apt -y install nginx
 
-CMD ["systemctl", "start", "nginx"]
+CMD ["nginx"]
