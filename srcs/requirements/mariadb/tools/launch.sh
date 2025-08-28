@@ -2,4 +2,4 @@
 
 mysqld;
 
-
+ALTER 'root'@'localhost' IDENTIFIED BY ;
