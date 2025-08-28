@@ -1,5 +1,5 @@
 #!bin/bash
 
-mysqld_safe;
+mysqld;
 
 
