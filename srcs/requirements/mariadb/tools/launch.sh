@@ -10,10 +10,9 @@ until mysqladmin ping -u root -p${DB_ROOT_PASSWORD} --silent; do
 done
 
 mysql -u root -p${DB_ROOT_PASSWORD} -e "CREATE DATABASE ${DATABASE_NAME}; \
-			CREATE USER ${DATABASE_USERNAME}@'localhost' IDENTIFIED BY ${DB_USER_PASSWORD}; \
+			CREATE USER ${DATABASE_USERNAME}@`%` IDENTIFIED BY ${DB_USER_PASSWORD}; \
 			GRANT ALL PRIVILEGES ON ${DATABASE_NAME}.* TO ${DATABASE_USERNAME}@'localhost'; \
 			FLUSH PRIVILEGES;"
 
-mysqladmin shutdown -u root -p${DB_ROOT_PASSWORD}
+exec mysqld
 
-exec mysqld;
