@@ -1,2 +1,5 @@
 # Ignore passwords and its contents
 secrets/
+
+#ignore all env variable
+srcs/.env
