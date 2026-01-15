@@ -1,10 +1,13 @@
 FROM debian:bookworm
 
+RUN apt-get update && apt-get install -y mariadb-server \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 COPY ./tools/launch.sh /usr/local/bin/launch.sh
 
-RUN apt update && apt upgrade && apt-get install mariadb-server -y \
-	&& chmod +x /usr/local/bin/launch.sh
+RUN chmod +x /usr/local/bin/launch.sh
 
-COPY /conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
+EXPOSE 3306
 
 ENTRYPOINT ["/usr/local/bin/launch.sh"]

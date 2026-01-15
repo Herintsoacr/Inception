@@ -1,17 +1,71 @@
 version: "3.9"
 
 services:
+  nginx:
+    container_name: nginx
+    build: ./requirements/nginx
+    ports:
+      - "443:443"
+    volumes:
+      - wordpress_data:/var/www/html
+    depends_on:
+      - wordpress
+    networks:
+      - inception
+    restart: always
+
+  wordpress:
+    container_name: wordpress
+    build: ./requirements/wordpress
+    depends_on:
+      - mariadb
+    environment:
+      DB_HOST: mariadb
+      DATABASE_NAME: wordpress
+      DATABASE_USERNAME: wp_user
+    secrets:
+      - db_user_password
+    volumes:
+      - wordpress_data:/var/www/html
+    networks:
+      - inception
+    restart: always
+
   mariadb:
-    image: debian:bookworm
+    container_name: mariadb
     build: ./requirements/mariadb
+    environment:
+      DATABASE_NAME: wordpress
+      DATABASE_USERNAME: wp_user
     secrets:
       - db_root_password
       - db_user_password
     volumes:
-      - /home/herakoto/data:/var/lib/mysql
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - inception
+    restart: always
+
+volumes:
+  wordpress_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/herintsoa/data/wordpress
+  mariadb_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/herintsoa/data/mariadb
+
+networks:
+  inception:
+    driver: bridge
 
 secrets:
   db_root_password:
-    file: /home/herakoto/Inception/secrets/root_db_passwd
+    file: /home/herintsoa/Inception/secrets/root_db_passwd
   db_user_password:
-    file: /home/herakoto/Inception/secrets/user_db_password
+    file: /home/herintsoa/Inception/secrets/user_db_password

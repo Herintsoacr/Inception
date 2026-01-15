@@ -2,6 +2,5 @@
 
 user = mysql
 port = 3306
-datadir = /home/herakoto/data/
-
-bin-address = 0.0.0.0
+datadir = /var/lib/mysql
+bind-address = 0.0.0.0

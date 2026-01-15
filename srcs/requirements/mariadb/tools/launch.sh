@@ -1,18 +1,31 @@
-#!bin/bash
+#!/bin/bash
+set -euo pipefail
 
-DB_ROOT_PASSWORD = $(cat /run/secrets/db_root_password)
-DB_USER_PASSWORD = $(cat /run/secrets/db_user_password)
+DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+DB_USER_PASSWORD=$(cat /run/secrets/db_user_password)
+DB_NAME=${DATABASE_NAME:-wordpress}
+DB_USER=${DATABASE_USERNAME:-wp_user}
 
-exec mysqld;
+# Initialize database directory if empty
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+    mariadb-install-db --user=mysql --ldata=/var/lib/mysql > /dev/null
+fi
 
-until mysqladmin ping -u root -p${DB_ROOT_PASSWORD} --silent; do
-	sleep 1
+# Start temporary server without networking to run setup
+mysqld_safe --datadir=/var/lib/mysql --skip-networking &
+until mysqladmin ping --silent; do
+    sleep 1
 done
 
-mysql -u root -p${DB_ROOT_PASSWORD} -e "CREATE DATABASE ${DATABASE_NAME}; \
-			CREATE USER ${DATABASE_USERNAME}@`%` IDENTIFIED BY ${DB_USER_PASSWORD}; \
-			GRANT ALL PRIVILEGES ON ${DATABASE_NAME}.* TO ${DATABASE_USERNAME}@'localhost'; \
-			FLUSH PRIVILEGES;"
+mysql -u root <<SQL
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${DB_ROOT_PASSWORD}';
+CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\`;
+CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_USER_PASSWORD}';
+GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'%';
+FLUSH PRIVILEGES;
+SQL
 
-exec mysqld
+mysqladmin -uroot -p"${DB_ROOT_PASSWORD}" shutdown
+
+exec mysqld_safe --datadir=/var/lib/mysql
 
