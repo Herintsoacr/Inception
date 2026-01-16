@@ -1,6 +1,7 @@
 all: up
 
 up:
+	mkdir -p /home/herintsoa/data/mariadb /home/herintsoa/data/wordpress
 	docker compose -f srcs/docker-compose.yml up -d --build
 
 down:

@@ -17,12 +17,11 @@ services:
   wordpress:
     container_name: wordpress
     build: ./requirements/wordpress
+    env_file: ./.env
     depends_on:
       - mariadb
-    environment:
-      DB_HOST: mariadb
-      DATABASE_NAME: wordpress
-      DATABASE_USERNAME: wp_user
+    expose:
+      - "9000"
     secrets:
       - db_user_password
     volumes:
@@ -34,9 +33,9 @@ services:
   mariadb:
     container_name: mariadb
     build: ./requirements/mariadb
-    environment:
-      DATABASE_NAME: wordpress
-      DATABASE_USERNAME: wp_user
+    env_file: ./.env
+    expose:
+      - "3306"
     secrets:
       - db_root_password
       - db_user_password
@@ -65,7 +64,11 @@ networks:
     driver: bridge
 
 secrets:
+  user_wp_password:
+    file: /home/herintsoa/Inception/secrets/user_wp_pass.txt
+  wp_root_password:
+    file: /home/herintsoa/Inception/secrets/admin_wp_passwords.txt
   db_root_password:
-    file: /home/herintsoa/Inception/secrets/root_db_passwd
+    file: /home/herintsoa/Inception/secrets/root_db_passwd.txt
   db_user_password:
-    file: /home/herintsoa/Inception/secrets/user_db_password
+    file: /home/herintsoa/Inception/secrets/user_db_password.txt
