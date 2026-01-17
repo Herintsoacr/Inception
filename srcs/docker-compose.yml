@@ -23,6 +23,8 @@ services:
     expose:
       - "9000"
     secrets:
+      - wp_root_password
+      - user_wp_password
       - db_user_password
     volumes:
       - wordpress_data:/var/www/html
