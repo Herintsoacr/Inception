@@ -6,10 +6,10 @@ services:
     build: ./requirements/nginx
     ports:
       - "443:443"
-    volumes:
-      - wordpress_data:/var/www/html
     depends_on:
       - wordpress
+    volumes:
+      - wordpress_data:/var/www/html
     networks:
       - inception
     restart: always
@@ -51,13 +51,13 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/herintsoa/data/wordpress
+      device: /home/herakoto/data/wordpress
   mariadb_data:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/herintsoa/data/mariadb
+      device: /home/herakoto/data/mariadb
 
 networks:
   inception:
@@ -65,10 +65,10 @@ networks:
 
 secrets:
   user_wp_password:
-    file: /home/herintsoa/Inception/secrets/user_wp_pass.txt
+    file: /home/herakoto/Inception/secrets/user_wp_pass.txt
   wp_root_password:
-    file: /home/herintsoa/Inception/secrets/admin_wp_passwords.txt
+    file: /home/herakoto/Inception/secrets/admin_wp_passwords.txt
   db_root_password:
-    file: /home/herintsoa/Inception/secrets/root_db_passwd.txt
+    file: /home/herakoto/Inception/secrets/root_db_passwd.txt
   db_user_password:
-    file: /home/herintsoa/Inception/secrets/user_db_password.txt
+    file: /home/herakoto/Inception/secrets/user_db_password.txt

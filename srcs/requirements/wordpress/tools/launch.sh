@@ -1,15 +1,8 @@
 #!/bin/bash
 
-curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar 
-
-php wp-cli.phar --info
-
-chmod +x wp-cli.phar
-mv wp-cli.phar /usr/local/bin/wp
-
-wp core download --allow-root
-
 if [ ! -f wp-config.php ]; then
+	wp core download --allow-root
+
 	wp config create \
     --dbname="$DB_NAME" \
     --dbuser="$DB_USER" \
