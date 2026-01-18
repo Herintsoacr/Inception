@@ -1,6 +1,7 @@
 FROM debian:bookworm
 
 RUN apt-get update && apt-get install -y \
+	php \
     php-fpm \
     php-mysql \
     curl \
@@ -10,6 +11,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /var/www/html
 
 COPY ./tools/launch.sh /usr/local/bin/launch.sh
+COPY ./conf/www.conf /usr/php/8.2/fpm/pool.d/www.conf
 
 RUN chmod +x /usr/local/bin/launch.sh
 

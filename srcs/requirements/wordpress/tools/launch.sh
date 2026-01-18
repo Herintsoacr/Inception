@@ -29,4 +29,4 @@ if [ ! -f wp-config.php ]; then
   --user_pass=$WP_USER_PASS
 fi
 
-
+exec php-fpm

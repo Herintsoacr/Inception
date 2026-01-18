@@ -1,12 +1,7 @@
 #!/bin/bash
-set -euo pipefail
 
 DB_ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 DB_USER_PASSWORD=$(cat /run/secrets/db_user_password)
-echo "BD_root_passwd: "  ${DB_ROOT_PASSWORD}
-echo "DB user passwd: " ${DB_USER_PASSWORD}
-DB_NAME=${DATABASE_NAME:-wordpress}
-DB_USER=${DATABASE_USERNAME:-wp_user}
 
 # Initialize database directory if empty
 if [ ! -d "/var/lib/mysql/mysql" ]; then
